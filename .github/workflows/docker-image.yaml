@@ -53,9 +53,8 @@ jobs:
           echo "Current ubuntu version is still $current_version"
           echo "BUILD = false" >> $GITHUB_ENV
         fi
-        cat $env
- #       cat $GITHUB_ENV
-        
+        cat $GITHUB_ENV
+        cat $GITHUB_ENV.BUILD
         
     - name: Build, tag, and push image to Amazon ECR
       if: env.BUILD
