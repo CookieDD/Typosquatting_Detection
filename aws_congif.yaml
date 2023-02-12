@@ -1,0 +1,3 @@
+s3_bucket_name: typosquatting-storage
+aws_credentials:
+  region_name: ap-southeast-2
