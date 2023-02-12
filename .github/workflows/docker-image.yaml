@@ -42,6 +42,9 @@ jobs:
     - name: Check if there is a push or if Ubuntu version changes
       env: 
         BUILD: false
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: docker-typosquatting
+        IMAGE_TAG: latest
       run: |
         current_version=$(lsb_release -r -s)
         echo "$GITHUB_EVENT_NAME"
@@ -57,16 +60,8 @@ jobs:
           echo "BUILD = false" >> $GITHUB_ENV
         fi
         echo "BUILD value set to $BUILD"
-
-        
-    - name: Build, tag, and push image to Amazon ECR
-      if: env.BUILD
-      env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: docker-typosquatting
-        IMAGE_TAG: latest
-      run: |
-        echo "$BUILD"
-        echo "New version or new push detected"
-#        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-#        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        if ${BUILD} == true; then
+          echo "BUILD value is $BUILD"
+          echo "New version or new push detected"
+        else
+          echo "BUILD value is $BUILD"
