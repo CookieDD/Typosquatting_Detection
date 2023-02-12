@@ -64,7 +64,7 @@ jobs:
         ECR_REPOSITORY: docker-typosquatting
         IMAGE_TAG: latest
       run: |
-        echo ${{ GITHUB_ENV.BUILD }}
+        echo $GITHUB_ENV.BUILD
         echo "New version or new push detected"
 #        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
 #        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
