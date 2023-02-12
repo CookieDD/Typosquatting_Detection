@@ -54,7 +54,7 @@ jobs:
           echo "BUILD = false" >> $GITHUB_ENV
         fi
         cat $GITHUB_ENV
-        cat $env
+ #       cat $env
         
         
     - name: Build, tag, and push image to Amazon ECR
@@ -64,7 +64,7 @@ jobs:
         ECR_REPOSITORY: docker-typosquatting
         IMAGE_TAG: latest
       run: |
-        echo ${{ env.BUILD }}
+        echo ${{ GITHUB_ENV.BUILD }}
         echo "New version or new push detected"
 #        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
 #        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
