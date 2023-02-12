@@ -12,7 +12,7 @@ env:
   AWS_REGION: ap-southeast-2
   IMAGE_TAG: latest
   CUR_UBUNTU_VER: 22.04
-  BUILD: false
+
 
 jobs:
 
@@ -40,6 +40,8 @@ jobs:
       
       
     - name: Check if there is a push or if Ubuntu version changes
+      env: 
+        BUILD: false
       run: |
         current_version=$(lsb_release -r -s)
         echo "$GITHUB_EVENT_NAME"
@@ -54,11 +56,11 @@ jobs:
           echo "Current ubuntu version is still $current_version"
           echo "BUILD = false" >> $GITHUB_ENV
         fi
-        echo "$BUILD"
+        echo "BUILD value set to $BUILD"
 
         
     - name: Build, tag, and push image to Amazon ECR
-      if: ${{ env.BUILD }}
+      if: env.BUILD
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: docker-typosquatting
