@@ -6,10 +6,10 @@ on:
   pull_request:
     branches: [ "master" ]
   schedule:
-    - cron: '45 8 * * 5'
+    - cron: '5 13 * * 1'
     
 env:
-  AWS_REGION: ap-southeast-2
+  AWS_REGION: us-east-1
   IMAGE_TAG: latest
   CUR_UBUNTU_VER: 22.04
 
@@ -23,45 +23,41 @@ jobs:
     steps:
     
 
-#     - name: Check out code
-#       uses: actions/checkout@v3
+    - name: Check out code
+      uses: actions/checkout@v3
 
-#     - name: Configure AWS credentials
-#       uses: aws-actions/configure-aws-credentials@v1
-#       with:
-#         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#         aws-region: ${{ env.AWS_REGION }}
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
 
 
-#     - name: Login to Amazon ECR
-#       id: login-ecr
-#       uses: aws-actions/amazon-ecr-login@v1
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
       
       
-    - name: Check if there is a push or if Ubuntu version changes
+    - name: Build and push new image if a new commit or ubuntu version detected.
       env: 
         BUILD: false
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: docker-typosquatting
+        ECR_REPOSITORY: typo-project
         IMAGE_TAG: latest
       run: |
         current_version=$(lsb_release -r -s)
         echo "$GITHUB_EVENT_NAME"
         if [ "$GITHUB_EVENT_NAME" == "push" ];  then
           echo "A new push triggered"
-          echo "BUILD = true" >> $GITHUB_ENV
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         elif [ $current_version != ${{ env.CUR_UBUNTU_VER }} ]; then
           echo "A new Ubuntu version is detected, new version is $current_version"
-          echo "BUILD = true" >> $GITHUB_ENV
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         else
           echo "No new push or new ubuntu version detected "
           echo "Current ubuntu version is still $current_version"
-          echo "BUILD = false" >> $GITHUB_ENV
         fi
-        echo "BUILD value set to $BUILD"
-        if ${BUILD} == true; then
-          echo "BUILD value is $BUILD"
-          echo "New version or new push detected"
-        else
-          echo "BUILD value is $BUILD"
+
