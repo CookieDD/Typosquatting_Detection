@@ -1,0 +1,11 @@
+whois
+selenium
+psutil
+pyyaml
+pytz
+beautifulsoup4
+vt-py
+requests
+OTXv2
+python-whois
+boto3
