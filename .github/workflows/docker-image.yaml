@@ -54,17 +54,17 @@ jobs:
           echo "Current ubuntu version is still $current_version"
           echo "BUILD = false" >> $GITHUB_ENV
         fi
-        cat $env.BUILD 
+        echo "$BUILD"
 
         
     - name: Build, tag, and push image to Amazon ECR
-      if: env.BUILD
+      if: ${{ env.BUILD }}
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: docker-typosquatting
         IMAGE_TAG: latest
       run: |
-        echo $GITHUB_ENV.BUILD
+        echo "$BUILD"
         echo "New version or new push detected"
 #        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
 #        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
