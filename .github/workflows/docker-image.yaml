@@ -54,7 +54,7 @@ jobs:
           echo "BUILD = false" >> $GITHUB_ENV
         fi
         cat $GITHUB_ENV
-        cat ${{env.BUILD}}
+        cat ${{GITHUB_ENV.BUILD}}
         
     - name: Build, tag, and push image to Amazon ECR
       if: env.BUILD
