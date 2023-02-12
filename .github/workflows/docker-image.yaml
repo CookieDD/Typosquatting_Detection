@@ -12,6 +12,7 @@ env:
   AWS_REGION: ap-southeast-2
   IMAGE_TAG: latest
   CUR_UBUNTU_VER: 22.04
+  BUILD: false
 
 jobs:
 
@@ -54,7 +55,7 @@ jobs:
           echo "BUILD = false" >> $GITHUB_ENV
         fi
         cat $GITHUB_ENV
-        cat ${{GITHUB_ENV.BUILD}}
+        cat $env
         
     - name: Build, tag, and push image to Amazon ECR
       if: env.BUILD
