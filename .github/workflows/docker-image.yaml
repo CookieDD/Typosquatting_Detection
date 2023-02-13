@@ -4,8 +4,8 @@ on:
   push:
     branches: [ "master" ]
   schedule:
-    - cron: '0 16 * * 1'
-    
+    - cron: '10 17 * * 1'
+    - timezone: 'Pacific/Auckland'
 env:
   AWS_REGION: us-east-1
   IMAGE_TAG: latest
