@@ -3,8 +3,8 @@ name: Docker Image CI
 on:
   push:
     branches: [ "master" ]
-  schedule:
-    - cron: '10 4 * * 1'
+#   schedule:
+#     - cron: '10 4 * * 1'
 
 env:
   AWS_REGION: us-east-1
@@ -46,16 +46,16 @@ jobs:
       run: |
         current_version=$(lsb_release -r -s)
         echo "$GITHUB_EVENT_NAME"
-        if [ "$GITHUB_EVENT_NAME" == "push" ];  then
-          echo "A new push triggered"
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-        elif [ $current_version != ${{ env.CUR_UBUNTU_VER }} ]; then
-          echo "A new Ubuntu version is detected, new version is $current_version"
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-        else
-          echo "No new push or new ubuntu version detected "
-          echo "Current ubuntu version is still $current_version"
-        fi
+#        if [ "$GITHUB_EVENT_NAME" == "push" ];  then
+#          echo "A new push triggered"
+#          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+#          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+#        elif [ $current_version != ${{ env.CUR_UBUNTU_VER }} ]; then
+#          echo "A new Ubuntu version is detected, new version is $current_version"
+#          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+#          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+#        else
+#          echo "No new push or new ubuntu version detected "
+#          echo "Current ubuntu version is still $current_version"
+#        fi
 
